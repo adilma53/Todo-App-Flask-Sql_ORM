@@ -1,4 +1,4 @@
-#!/home/adil/PROJECTS/personal/todo-app-flask/venv/bin/python
+#!/home/adil/PROJECTS/personal/Todo-App-Flask-Sql_ORM/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
