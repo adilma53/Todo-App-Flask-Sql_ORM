@@ -7,7 +7,9 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS to allow requests from the React frontend
 
 # Get the PostgreSQL URI from environment variables
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')  # Use the environment variable DATABASE_URL
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://adil_db_name_user:ACUhYDGYHM6OEBcEkyOHk7MjfPV5RbMI@dpg-ck329vmru70s73av7kt0-a/adil_db_name'
 
 db = SQLAlchemy(app)
 
