@@ -17,6 +17,10 @@ class Todo(db.Model):
     text = db.Column(db.String(200), nullable=False)
     completed = db.Column(db.Boolean, default=False)
 
+
+@app.route('/', methods=['GET'])
+def get_hello():
+    return 'hello adil'
 # Get all todos
 @app.route('/api/todos', methods=['GET'])
 def get_todos():
