@@ -19,10 +19,10 @@ class Todo(db.Model):
     text = db.Column(db.String(200), nullable=False)
     completed = db.Column(db.Boolean, default=False)
 
-
 @app.route('/', methods=['GET'])
 def get_hello():
     return 'hello adil'
+
 # Get all todos
 @app.route('/api/todos', methods=['GET'])
 def get_todos():
@@ -35,6 +35,19 @@ def get_todos():
 def add_todo():
     data = request.get_json()
     new_todo = Todo(text=data['text'])
+
+    try:
+        db.session.add(new_todo)
+        db.session.commit()
+        return jsonify({'message': 'Todo added successfully'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+# Add a new todo with custom text
+@app.route('/api/addtodo/<text>', methods=['POST'])
+def add_custom_todo(text):
+    new_todo = Todo(text=text)
 
     try:
         db.session.add(new_todo)
@@ -80,4 +93,3 @@ def delete_todo(id):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
-
