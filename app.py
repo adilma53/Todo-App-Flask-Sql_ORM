@@ -1,18 +1,16 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-
 import os
-from dotenv import load_dotenv
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS to allow requests from the React frontend
 
 # Load environment variables from .env file
-load_dotenv()
-db_uri = os.getenv("SQLALCHEMY_DATABASE_URI")
-# Replace the SQLite URI with your MariaDB URI
-app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+
+# Get the PostgreSQL URI from environment variables
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')  # Use the environment variable DATABASE_URL
+
 db = SQLAlchemy(app)
 
 # Define the Todo model
@@ -22,14 +20,14 @@ class Todo(db.Model):
     completed = db.Column(db.Boolean, default=False)
 
 # Get all todos
-@app.get('/api/todos')
+@app.route('/api/todos', methods=['GET'])
 def get_todos():
     todos = Todo.query.all()
     todo_list = [{'id': todo.id, 'text': todo.text, 'completed': todo.completed} for todo in todos]
     return jsonify(todo_list)
 
 # Add a new todo
-@app.post('/api/todos')
+@app.route('/api/todos', methods=['POST'])
 def add_todo():
     data = request.get_json()
     new_todo = Todo(text=data['text'])
@@ -43,7 +41,7 @@ def add_todo():
         return jsonify({'error': str(e)}), 500
 
 # Update a todo's completed status
-@app.put('/api/todos/<int:id>')
+@app.route('/api/todos/<int:id>', methods=['PUT'])
 def update_todo(id):
     todo = Todo.query.get(id)
 
@@ -61,7 +59,7 @@ def update_todo(id):
         return jsonify({'error': str(e)}), 500
 
 # Delete a todo
-@app.delete('/api/todos/<int:id>')
+@app.route('/api/todos/<int:id>', methods=['DELETE'])
 def delete_todo(id):
     todo = Todo.query.get(id)
 
