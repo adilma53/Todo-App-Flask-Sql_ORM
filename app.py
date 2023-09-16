@@ -6,7 +6,6 @@ import os
 app = Flask(__name__)
 CORS(app)  # Enable CORS to allow requests from the React frontend
 
-# Load environment variables from .env file
 
 # Get the PostgreSQL URI from environment variables
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')  # Use the environment variable DATABASE_URL
@@ -75,4 +74,4 @@ def delete_todo(id):
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=80)
